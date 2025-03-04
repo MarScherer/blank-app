@@ -32,6 +32,7 @@ def CreateVariantWithPO():
 
     if PSResponse.status_code < 300:
         st.write("Upload was successful ✅")
+        st.link_button("Open Project", PSURL)
     else:
         st.title("No Succes ❌ Error Code: ",ResponseCode)
         #st.write(json)
@@ -137,6 +138,8 @@ if APIKey != "" and BaseURL != "":
         GetGroupID = requests.get(BaseURL+"/api/v1/groups/default", headers=header).json()
         GroupID = GetGroupID["id"]
         GroupName = GetGroupID["name"]
+        RelativePath = GetGroupID["relativePath"]
+        
 
         st.write("Using PS Orga: " + GroupName + " ✅")
 
@@ -159,6 +162,8 @@ if GroupAvailable:
     SelectedProjectRow = Projects.loc[Projects["name"]==SelectedProject].reset_index(drop=True)
     SelectedProjectID = SelectedProjectRow.iloc[0]["id"]
     st.write("Selected Project: ", SelectedProject, " - ", SelectedProjectID)
+
+    PSURL = BaseURL + RelativePath + "/lca/" + SelectedProjectID + "/overview"
 
 ## Upload Excel File and Type Variant Name
 if GroupAvailable:
