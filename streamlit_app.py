@@ -178,4 +178,7 @@ if excelfile is not None and Variant != "":
     #st.dataframe(excel)
 
     if st.button("Upload PO"):
-        CreateVariantWithPO()
+        try:
+            CreateVariantWithPO()
+        except:
+            st.write("Oops, there is something wrong with your Excel ❌")
