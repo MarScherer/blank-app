@@ -8,7 +8,8 @@ from requests.auth import HTTPBasicAuth
 #YjRhYWQxMGYtZjgxZS00OGRlLTg1NjYtODhjMmU2YjY0MDQ1
 #https://staging.product-sustainability.com
 
-st.title("☁️ PS API Upload")
+st.title("Product Sustainability API Upload")
+st.caption("This app allows you to upload an excel file which uses the Umberto 11 Production Order export format to a selected Project within Product Sustainability. Start by entering your API Key and the base URL of your system.")
 
 ## Functions
 def CreateVariantWithPO():
@@ -128,6 +129,7 @@ def GetUUID(name, dict):
 
 ## Inputs
 APIKey = st.text_input("Enter Your API Key")
+st.caption("URL format should be 'https://product-sustainability.com'")
 BaseURL = st.text_input("Enter Your Base URL")
 GroupAvailable = False
 excelfile = None
@@ -144,7 +146,8 @@ if APIKey != "" and BaseURL != "":
         RelativePath = GetGroupID["relativePath"]
         
 
-        st.write("Using PS Orga: " + GroupName + " ✅")
+        st.write("You're uploading to: " + GroupName + " ✅")
+        st.caption("Please select one of the LCA Projects from the Dropdown below.")
 
         GroupAvailable = True
 
@@ -164,13 +167,15 @@ if GroupAvailable:
     SelectedProject = st.selectbox("Select Project for Upload",ProjectList)
     SelectedProjectRow = Projects.loc[Projects["name"]==SelectedProject].reset_index(drop=True)
     SelectedProjectID = SelectedProjectRow.iloc[0]["id"]
-    st.write("Selected Project: ", SelectedProject, " - ", SelectedProjectID)
+    #st.write("Selected Project: ", SelectedProject, " - ID: ", SelectedProjectID)
 
     PSURL = BaseURL + RelativePath + "/lca/" + SelectedProjectID + "/overview"
 
 ## Upload Excel File and Type Variant Name
 if GroupAvailable:
-    excelfile = st.file_uploader("Upload Excel file", type="xlsx")    
+    st.caption("Please upload the excel file and make sure its in the Umberto 11 Production Order export format. Only the Production Order on the first sheet will be uploaded! It is also possible to add Attributes to the entries by entering them in a new column called 'Classifications' in the following format: {\"name\": \"Attribute Name\", \"value\": \"Attribute Value\"}")
+    excelfile = st.file_uploader("Upload Excel file", type="xlsx")
+    st.caption("Enter die Variant name that will be used for the upload to Product Sustainability.") 
     Variant = st.text_input("Enter Your Variant Name")
 
 if excelfile is not None and Variant != "":
