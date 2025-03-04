@@ -68,7 +68,10 @@ def CreateJSONBOM():
         AssemblyID = GetUUID(AssemblyName, dict)["ID"]
         AssemblyQty = str(excel.iloc[row]["Quantity"])
         AssemblyUnit = excel.iloc[row]["Unit"]
-        AssemblyProcess = excel.iloc[row]["Process"]
+        if not excel.isnull().iloc[row]["Process"]:
+            AssemblyProcess = excel.iloc[row]["Process"]
+        else:
+            AssemblyProcess = ""
 
         ComponentName = excel.iloc[row]["Component"]
         ComponentID = GetUUID(ComponentName, dict)["ID"]
